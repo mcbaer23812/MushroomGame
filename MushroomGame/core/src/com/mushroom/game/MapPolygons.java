@@ -1,5 +1,4 @@
 package com.mushroom.game;
-//TEST OUT A COMMIT
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.objects.PolygonMapObject;
