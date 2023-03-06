@@ -12,6 +12,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
+import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
@@ -23,11 +24,13 @@ public class Player {
 	private TextureRegion[] frames;
 	private Animation<TextureRegion> animation;
 
+	private Vector2 footPosition;
 	private Vector2 position;
 	private Boolean walking;
 	private Boolean running;
 	private Boolean facingLeft;
 	private Boolean jumping;
+	public Boolean grounded;
 	private float stateTime;
 
 	private float landingTime = -1f;
@@ -42,7 +45,9 @@ public class Player {
 		frames = new TextureRegion[0];
 		animation = new Animation<TextureRegion>(0.1f, frames);
 		position = new Vector2(640, 50);
+		footPosition = new Vector2(0 , -0.15f);
 		jumping = false;
+		grounded = true;
 		facingLeft = false;
 		running = false;
 		walking = false;
@@ -72,34 +77,16 @@ public class Player {
 		bodyFixtureDef.friction = 2.5f; // 2.5f
 		body.createFixture(bodyFixtureDef);
 		bodyShape.dispose();
-		
-		//set up foot sensor
-		world.setContactListener(new ContactListener() {
 
-			@Override
-			public void beginContact(Contact contact) {
-				
-			}
-
-			@Override
-			public void endContact(Contact contact) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void preSolve(Contact contact, Manifold oldManifold) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void postSolve(Contact contact, ContactImpulse impulse) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-		});
+		PolygonShape footSensor = new PolygonShape();
+		footSensor.setAsBox((frames[0].getRegionWidth() / 6) / PPM, (frames[0].getRegionHeight() / 16) / PPM,
+				footPosition, 0);
+		FixtureDef footSensorFixtureDef = new FixtureDef();
+		footSensorFixtureDef.shape = footSensor;
+		footSensorFixtureDef.isSensor = true;
+		Fixture footFixture = body.createFixture(footSensorFixtureDef);
+		footFixture.setUserData("footSensor");
+		footSensor.dispose();
 	}
 
 	public void update(float delta) {
@@ -120,11 +107,10 @@ public class Player {
 		}
 
 		if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && Math.abs(body.getLinearVelocity().y) < 0.01f) {
-		    jump();
+			jump();
 		}
-		
+
 		friction();
-		
 
 		position.set(body.getPosition().scl(PPM));
 		stateTime += delta;
@@ -233,9 +219,17 @@ public class Player {
 		runningSpriteSheet.dispose();
 		world.dispose();
 	}
+	
+	public void setGrounded(boolean grounded) {
+		this.grounded = grounded;
+	}
 
 	public void setBodyPosition(Vector2 position) {
 		this.body.setTransform(position.scl(1f / PPM), 0f);
+	}
+	
+	public boolean getGrounded() {
+		return grounded;
 	}
 
 	public Vector2 getPosition() {
