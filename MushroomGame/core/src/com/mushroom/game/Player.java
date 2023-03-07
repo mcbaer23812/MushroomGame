@@ -9,12 +9,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.Contact;
-import com.badlogic.gdx.physics.box2d.ContactImpulse;
-import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 
@@ -29,11 +25,9 @@ public class Player {
 	private Boolean walking;
 	private Boolean running;
 	private Boolean facingLeft;
-	private Boolean jumping;
-	public Boolean grounded;
+	private Boolean grounded;
 	private float stateTime;
 
-	private float landingTime = -1f;
 	private float PPM = 100f; // Pixels Per Meter
 	private World world;
 	private Body body;
@@ -42,11 +36,11 @@ public class Player {
 		this.world = world;
 		this.idleSpriteSheet = idleSpriteSheet;
 		this.runningSpriteSheet = runningSpriteSheet;
+		grounded = true;
 		frames = new TextureRegion[0];
 		animation = new Animation<TextureRegion>(0.1f, frames);
 		position = new Vector2(640, 50);
-		footPosition = new Vector2(0 , -0.15f);
-		jumping = false;
+		footPosition = new Vector2(0, -0.15f);
 		grounded = true;
 		facingLeft = false;
 		running = false;
@@ -65,7 +59,7 @@ public class Player {
 		FixtureDef capFixtureDef = new FixtureDef();
 		capFixtureDef.shape = capShape;
 		capFixtureDef.density = 1.0f;
-		capFixtureDef.friction = 0.1f; // 0.1f
+		capFixtureDef.friction = 0.1f;
 		body.createFixture(capFixtureDef);
 		capShape.dispose();
 
@@ -74,7 +68,7 @@ public class Player {
 		FixtureDef bodyFixtureDef = new FixtureDef();
 		bodyFixtureDef.shape = bodyShape;
 		bodyFixtureDef.density = 1.0f;
-		bodyFixtureDef.friction = 2.5f; // 2.5f
+		bodyFixtureDef.friction = 2.5f;
 		body.createFixture(bodyFixtureDef);
 		bodyShape.dispose();
 
@@ -90,6 +84,7 @@ public class Player {
 	}
 
 	public void update(float delta) {
+		friction();
 		if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
 			if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT)) {
 				runLeft();
@@ -105,24 +100,23 @@ public class Player {
 		} else {
 			idle();
 		}
-
 		if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && Math.abs(body.getLinearVelocity().y) < 0.01f) {
 			jump();
 		}
-
-		friction();
-
 		position.set(body.getPosition().scl(PPM));
 		stateTime += delta;
 		pickFrames();
 	}
 
 	public void friction() {
-		if (jumping) {
-			body.getFixtureList().get(1).setFriction(0f);
-		} else {
-			body.getFixtureList().get(1).setFriction(2.5f);
+		float friction = body.getFixtureList().get(1).getFriction();
+		if (!grounded) {
+			friction = 0f;
+		} else if (friction < 2.5f && grounded) {
+			friction += 0.25f;
 		}
+		body.getFixtureList().get(1).setFriction(friction);
+		;
 	}
 
 	public void idle() {
@@ -133,7 +127,6 @@ public class Player {
 	public void jump() {
 		body.applyLinearImpulse(0, 35 / PPM, body.getWorldCenter().x, body.getWorldCenter().y, true);
 		running = true;
-		jumping = true;
 	}
 
 	public void walkLeft() {
@@ -219,17 +212,13 @@ public class Player {
 		runningSpriteSheet.dispose();
 		world.dispose();
 	}
-	
-	public void setGrounded(boolean grounded) {
-		this.grounded = grounded;
-	}
 
 	public void setBodyPosition(Vector2 position) {
 		this.body.setTransform(position.scl(1f / PPM), 0f);
 	}
-	
-	public boolean getGrounded() {
-		return grounded;
+
+	public void setGrounded(boolean grounded) {
+		this.grounded = grounded;
 	}
 
 	public Vector2 getPosition() {
@@ -240,4 +229,7 @@ public class Player {
 		return body;
 	}
 
+	public boolean getGrounded() {
+		return grounded;
+	}
 }

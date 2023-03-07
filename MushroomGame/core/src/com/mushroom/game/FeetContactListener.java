@@ -7,7 +7,11 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
 
 public class FeetContactListener implements ContactListener {
-	private boolean isGrounded;
+	private Player player;
+
+	public FeetContactListener(Player player) {
+		this.player = player;
+	}
 
 	private boolean isFootSensor(Fixture fixture) {
 		Object userData = fixture.getUserData();
@@ -24,9 +28,9 @@ public class FeetContactListener implements ContactListener {
 		Fixture fixtureA = contact.getFixtureA();
 		Fixture fixtureB = contact.getFixtureB();
 		if (isFootSensor(fixtureA) && isMapObject(fixtureB)) {
-			isGrounded = true;
+			player.setGrounded(true);
 		} else if (isFootSensor(fixtureB) && isMapObject(fixtureA)) {
-			isGrounded = true;
+			player.setGrounded(true);
 		}
 	}
 
@@ -34,18 +38,16 @@ public class FeetContactListener implements ContactListener {
 	public void endContact(Contact contact) {
 		Fixture fixtureA = contact.getFixtureA();
 		Fixture fixtureB = contact.getFixtureB();
-
 		if (isFootSensor(fixtureA) && isMapObject(fixtureB)) {
-			isGrounded = false;
+			player.setGrounded(false);
 		} else if (isFootSensor(fixtureB) && isMapObject(fixtureA)) {
-			isGrounded = false;
+			player.setGrounded(false);
 		}
 	}
 
 	@Override
 	public void preSolve(Contact contact, Manifold oldManifold) {
-		// TODO Auto-generated method stub
-
+		contact.resetFriction();
 	}
 
 	@Override
@@ -53,9 +55,4 @@ public class FeetContactListener implements ContactListener {
 		// TODO Auto-generated method stub
 
 	}
-
-	public boolean getGrounded() {
-		return isGrounded;
-	}
-
 }

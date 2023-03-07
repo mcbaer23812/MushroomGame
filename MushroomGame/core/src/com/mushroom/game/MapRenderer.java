@@ -23,7 +23,7 @@ public class MapRenderer {
 	private Texture grassTexture3;
 	private Texture combinedTexture;
 	private float backgroundOffset = 0f;
-    private float PPM = 100f; // Pixels Per Meter
+	private float PPM = 100f; // Pixels Per Meter
 	// CAMERA & VIEWPORT
 	private OrthographicCamera camera;
 	private ExtendViewport viewport;
@@ -44,23 +44,22 @@ public class MapRenderer {
 		grassTexture3 = new Texture("images/grass_3.png");
 		// CAMERA & VEWIPORT
 		camera = new OrthographicCamera();
-		viewport = new ExtendViewport(640 /PPM, 320 /PPM, camera);
+		viewport = new ExtendViewport(640 / PPM, 320 / PPM, camera);
 		// MAP & MAP RENDERER
 		map = new TmxMapLoader().load("tilesets/OakWoodsTileMap.tmx");
-		tiledMapRenderer = new OrthogonalTiledMapRenderer(map, 1/PPM);
+		tiledMapRenderer = new OrthogonalTiledMapRenderer(map, 1 / PPM);
 	}
 
 	public void renderMap(Vector2 playerPosition) {
 		camera.update();
-		camera.position.set(playerPosition.x, viewport.getWorldHeight()/2, 0);
+		camera.position.set(playerPosition.x, viewport.getWorldHeight() / 2, 0);
 		loadBackgrounds(0 + backgroundOffset, 0);
 		loadBackgrounds(viewport.getWorldWidth() + backgroundOffset, 0);
 		if (playerPosition.x - backgroundOffset >= viewport.getWorldWidth() * 1.5) {
-			backgroundOffset += 640 /PPM;
+			backgroundOffset += 640 / PPM;
 		} else if (playerPosition.x <= (0 + backgroundOffset) + viewport.getWorldWidth() * 0.5) {
-			backgroundOffset -= 640 /PPM;
+			backgroundOffset -= 640 / PPM;
 		}
-
 		tiledMapRenderer.setView(camera);
 		tiledMapRenderer.render();
 	}
@@ -107,7 +106,7 @@ public class MapRenderer {
 	public OrthographicCamera getOrthoCamera() {
 		return camera;
 	}
-	
+
 	public ExtendViewport getViewport() {
 		return viewport;
 	}
