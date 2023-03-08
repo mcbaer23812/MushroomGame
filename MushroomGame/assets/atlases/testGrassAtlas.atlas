@@ -1,0 +1,26 @@
+testGrassAtlas.png
+size: 10, 12
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+grass1
+  rotate: false
+  xy: 0, 0
+  size: 8, 3
+  orig: 8, 3
+  offset: 0, 0
+  index: 1
+grass2
+  rotate: false
+  xy: 0, 3
+  size: 10, 5
+  orig: 10, 5
+  offset: 0, 0
+  index: 2
+grass3
+  rotate: false
+  xy: 0, 8
+  size: 9, 4
+  orig: 9, 4
+  offset: 0, 0
+  index: 3

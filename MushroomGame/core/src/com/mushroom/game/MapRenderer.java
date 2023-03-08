@@ -1,8 +1,11 @@
 package com.mushroom.game;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
@@ -12,16 +15,19 @@ import com.badlogic.gdx.utils.viewport.ExtendViewport;
 
 public class MapRenderer {
 	// BACKGROUNDS
-	private SpriteBatch batch1;
-	private SpriteBatch batch2;
-	private SpriteBatch batch3;
+	private SpriteBatch backgroundBatch1;
+	private SpriteBatch backgroundBatch2;
+	private SpriteBatch backgroundBatch3;
 	private Texture backgroundTexture1;
 	private Texture backgroundTexture2;
 	private Texture backgroundTexture3;
-	private Texture grassTexture1;
-	private Texture grassTexture2;
-	private Texture grassTexture3;
-	private Texture combinedTexture;
+	
+	//GRASS
+	private SpriteBatch grassBatch;
+	private TextureAtlas grassAtlas;
+	private AtlasRegion grassRegion1;
+	private AtlasRegion grassRegion2;
+	private AtlasRegion grassRegion3;
 	private float backgroundOffset = 0f;
 	private float PPM = 100f; // Pixels Per Meter
 	// CAMERA & VIEWPORT
@@ -33,15 +39,23 @@ public class MapRenderer {
 
 	public MapRenderer() {
 		// BACKGROUNDS & OTHER TEXTURES
-		batch1 = new SpriteBatch();
-		batch2 = new SpriteBatch();
-		batch3 = new SpriteBatch();
+		backgroundBatch1 = new SpriteBatch();
+		backgroundBatch2 = new SpriteBatch();
+		backgroundBatch3 = new SpriteBatch();
 		backgroundTexture1 = new Texture("images/background_layer_1.png");
 		backgroundTexture2 = new Texture("images/background_layer_2.png");
 		backgroundTexture3 = new Texture("images/background_layer_3.png");
-		grassTexture1 = new Texture("images/grass_1.png");
-		grassTexture2 = new Texture("images/grass_2.png");
-		grassTexture3 = new Texture("images/grass_3.png");
+		
+		//TEXTURE ATLAS, GRASS REGIONS
+		grassBatch = new SpriteBatch();
+		grassAtlas = new TextureAtlas(Gdx.files.internal("atlases/testGrassAtlas.atlas"));
+		grassRegion1 = grassAtlas.findRegion("grass1");
+		grassRegion2 = grassAtlas.findRegion("grass2");
+		grassRegion3 = grassAtlas.findRegion("grass3");
+		for (TextureAtlas.AtlasRegion region : grassAtlas.getRegions()) {
+		    // Apply texture filter so they aren't blurry
+		    region.getTexture().setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
+		}		
 		// CAMERA & VEWIPORT
 		camera = new OrthographicCamera();
 		viewport = new ExtendViewport(640 / PPM, 320 / PPM, camera);
@@ -62,23 +76,31 @@ public class MapRenderer {
 		}
 		tiledMapRenderer.setView(camera);
 		tiledMapRenderer.render();
+		
+	    grassBatch.setProjectionMatrix(camera.combined);
+		grassBatch.begin();
+		grassBatch.draw(grassRegion1, 670/PPM, 31.8f/PPM,17/PPM,5f/PPM);
+		grassBatch.draw(grassRegion2, 700/PPM, 31.8f/PPM,17/PPM,5f/PPM);
+		grassBatch.draw(grassRegion3, 640/PPM, 31.8f/PPM,17/PPM,5f/PPM);
+		grassBatch.end();
 	}
 
 	public void loadBackgrounds(float x, int y) {
-		batch1.setProjectionMatrix(camera.combined);
-		batch1.begin();
-		batch1.draw(backgroundTexture1, x, y, viewport.getWorldWidth(), viewport.getWorldHeight());
-		batch1.end();
+		backgroundBatch1.setProjectionMatrix(camera.combined);
+		backgroundBatch1.begin();
+		backgroundBatch1.draw(backgroundTexture1, x, y, viewport.getWorldWidth(), viewport.getWorldHeight());
+		backgroundBatch1.end();
 
-		batch2.setProjectionMatrix(camera.combined);
-		batch2.begin();
-		batch2.draw(backgroundTexture2, x, y, viewport.getWorldWidth(), viewport.getWorldHeight());
-		batch2.end();
+		backgroundBatch2.setProjectionMatrix(camera.combined);
+		backgroundBatch2.begin();
+		backgroundBatch2.draw(backgroundTexture2, x, y, viewport.getWorldWidth(), viewport.getWorldHeight());
+		backgroundBatch2.end();
 
-		batch3.setProjectionMatrix(camera.combined);
-		batch3.begin();
-		batch3.draw(backgroundTexture3, x, y, viewport.getWorldWidth(), viewport.getWorldHeight());
-		batch3.end();
+		backgroundBatch3.setProjectionMatrix(camera.combined);
+		backgroundBatch3.begin();
+		backgroundBatch3.draw(backgroundTexture3, x, y, viewport.getWorldWidth(), viewport.getWorldHeight());
+		backgroundBatch3.end();
+		
 	}
 
 	public void resize(int width, int height) {
@@ -89,14 +111,15 @@ public class MapRenderer {
 	}
 
 	public void dispose() {
-		batch1.dispose();
-		batch2.dispose();
-		batch3.dispose();
+		backgroundBatch1.dispose();
+		backgroundBatch2.dispose();
+		backgroundBatch3.dispose();
 		backgroundTexture1.dispose();
 		backgroundTexture2.dispose();
 		backgroundTexture3.dispose();
 		map.dispose();
 		tiledMapRenderer.dispose();
+		grassAtlas.dispose();
 	}
 
 	public TiledMap getTiledMap() {
