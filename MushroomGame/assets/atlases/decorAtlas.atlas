@@ -1,0 +1,75 @@
+decorAtlas.png
+size: 118, 88
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+fence1
+  rotate: false
+  xy: 45, 12
+  size: 73, 19
+  orig: 73, 19
+  offset: 0, 0
+  index: 1
+fence2
+  rotate: false
+  xy: 0, 31
+  size: 72, 19
+  orig: 72, 19
+  offset: 0, 0
+  index: 2
+grass1
+  rotate: false
+  xy: 0, 0
+  size: 8, 3
+  orig: 8, 3
+  offset: 0, 0
+  index: 1
+grass2
+  rotate: false
+  xy: 17, 0
+  size: 10, 5
+  orig: 10, 5
+  offset: 0, 0
+  index: 2
+grass3
+  rotate: false
+  xy: 8, 0
+  size: 9, 4
+  orig: 9, 4
+  offset: 0, 0
+  index: 3
+lamp
+  rotate: false
+  xy: 94, 31
+  size: 23, 57
+  orig: 23, 57
+  offset: 0, 0
+  index: -1
+rock1
+  rotate: false
+  xy: 27, 0
+  size: 20, 11
+  orig: 20, 11
+  offset: 0, 0
+  index: 1
+rock2
+  rotate: false
+  xy: 47, 0
+  size: 27, 12
+  orig: 27, 12
+  offset: 0, 0
+  index: 2
+rock3
+  rotate: false
+  xy: 0, 12
+  size: 45, 18
+  orig: 45, 18
+  offset: 0, 0
+  index: 3
+sign
+  rotate: false
+  xy: 72, 31
+  size: 22, 31
+  orig: 22, 31
+  offset: 0, 0
+  index: -1

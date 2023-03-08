@@ -21,13 +21,19 @@ public class MapRenderer {
 	private Texture backgroundTexture1;
 	private Texture backgroundTexture2;
 	private Texture backgroundTexture3;
-	
-	//GRASS
-	private SpriteBatch grassBatch;
-	private TextureAtlas grassAtlas;
+	// GRASS
+	private SpriteBatch decorBatch;
+	private TextureAtlas decorAtlas;
+	private AtlasRegion fenceRegion1;
+	private AtlasRegion fenceRegion2;
 	private AtlasRegion grassRegion1;
 	private AtlasRegion grassRegion2;
 	private AtlasRegion grassRegion3;
+	private AtlasRegion lampRegion;
+	private AtlasRegion rockRegion1;
+	private AtlasRegion rockRegion2;
+	private AtlasRegion rockRegion3;
+	private AtlasRegion signRegion;
 	private float backgroundOffset = 0f;
 	private float PPM = 100f; // Pixels Per Meter
 	// CAMERA & VIEWPORT
@@ -45,17 +51,23 @@ public class MapRenderer {
 		backgroundTexture1 = new Texture("images/background_layer_1.png");
 		backgroundTexture2 = new Texture("images/background_layer_2.png");
 		backgroundTexture3 = new Texture("images/background_layer_3.png");
-		
-		//TEXTURE ATLAS, GRASS REGIONS
-		grassBatch = new SpriteBatch();
-		grassAtlas = new TextureAtlas(Gdx.files.internal("atlases/testGrassAtlas.atlas"));
-		grassRegion1 = grassAtlas.findRegion("grass1");
-		grassRegion2 = grassAtlas.findRegion("grass2");
-		grassRegion3 = grassAtlas.findRegion("grass3");
-		for (TextureAtlas.AtlasRegion region : grassAtlas.getRegions()) {
-		    // Apply texture filter so they aren't blurry
-		    region.getTexture().setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
-		}		
+		// TEXTURE ATLAS, GRASS REGIONS
+		decorBatch = new SpriteBatch();
+		decorAtlas = new TextureAtlas(Gdx.files.internal("atlases/decorAtlas.atlas"));
+		fenceRegion1 = decorAtlas.findRegion("fence1");
+		fenceRegion2 = decorAtlas.findRegion("fence2");
+		grassRegion1 = decorAtlas.findRegion("grass1");
+		grassRegion2 = decorAtlas.findRegion("grass2");
+		grassRegion3 = decorAtlas.findRegion("grass3");
+		lampRegion = decorAtlas.findRegion("lamp");
+		rockRegion1 = decorAtlas.findRegion("rock1");
+		rockRegion2 = decorAtlas.findRegion("rock2");
+		rockRegion3 = decorAtlas.findRegion("rock3");
+		signRegion = decorAtlas.findRegion("sign");
+		for (TextureAtlas.AtlasRegion region : decorAtlas.getRegions()) {
+			// Apply texture filter so they aren't blurry
+			region.getTexture().setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
+		}
 		// CAMERA & VEWIPORT
 		camera = new OrthographicCamera();
 		viewport = new ExtendViewport(640 / PPM, 320 / PPM, camera);
@@ -76,13 +88,16 @@ public class MapRenderer {
 		}
 		tiledMapRenderer.setView(camera);
 		tiledMapRenderer.render();
-		
-	    grassBatch.setProjectionMatrix(camera.combined);
-		grassBatch.begin();
-		grassBatch.draw(grassRegion1, 670/PPM, 31.8f/PPM,17/PPM,5f/PPM);
-		grassBatch.draw(grassRegion2, 700/PPM, 31.8f/PPM,17/PPM,5f/PPM);
-		grassBatch.draw(grassRegion3, 640/PPM, 31.8f/PPM,17/PPM,5f/PPM);
-		grassBatch.end();
+
+		decorBatch.setProjectionMatrix(camera.combined);
+		decorBatch.begin();
+		decorBatch.draw(grassRegion1, 740 / PPM, 31.8f / PPM, 17 / PPM, 5f / PPM);
+		decorBatch.draw(grassRegion1, 640 / PPM, 31.8f / PPM, 17 / PPM, 5f / PPM);
+		decorBatch.draw(grassRegion1, 460 / PPM, 31.8f / PPM, 17 / PPM, 5f / PPM);
+		decorBatch.draw(grassRegion2, 670 / PPM, 31.8f / PPM, 17 / PPM, 5f / PPM);
+		decorBatch.draw(grassRegion2, 493 / PPM, 31.8f / PPM, 17 / PPM, 5f / PPM);
+		decorBatch.draw(grassRegion3, 610 / PPM, 31.8f / PPM, 17 / PPM, 5f / PPM);
+		decorBatch.end();
 	}
 
 	public void loadBackgrounds(float x, int y) {
@@ -100,7 +115,7 @@ public class MapRenderer {
 		backgroundBatch3.begin();
 		backgroundBatch3.draw(backgroundTexture3, x, y, viewport.getWorldWidth(), viewport.getWorldHeight());
 		backgroundBatch3.end();
-		
+
 	}
 
 	public void resize(int width, int height) {
@@ -119,7 +134,7 @@ public class MapRenderer {
 		backgroundTexture3.dispose();
 		map.dispose();
 		tiledMapRenderer.dispose();
-		grassAtlas.dispose();
+		decorAtlas.dispose();
 	}
 
 	public TiledMap getTiledMap() {
