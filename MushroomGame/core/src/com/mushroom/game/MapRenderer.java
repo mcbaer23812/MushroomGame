@@ -51,7 +51,7 @@ public class MapRenderer {
 		backgroundTexture1 = new Texture("images/background_layer_1.png");
 		backgroundTexture2 = new Texture("images/background_layer_2.png");
 		backgroundTexture3 = new Texture("images/background_layer_3.png");
-		// TEXTURE ATLAS, GRASS REGIONS
+		// TEXTURE ATLAS, GRASS REGIONS, ROCK REGIONS, MISC OBJECTS
 		decorBatch = new SpriteBatch();
 		decorAtlas = new TextureAtlas(Gdx.files.internal("atlases/decorAtlas.atlas"));
 		fenceRegion1 = decorAtlas.findRegion("fence1");
@@ -88,7 +88,6 @@ public class MapRenderer {
 		}
 		tiledMapRenderer.setView(camera);
 		tiledMapRenderer.render();
-
 		decorBatch.setProjectionMatrix(camera.combined);
 		decorBatch.begin();
 		// scaling x & y based on what looked best for grass1 texture, then multiplying
@@ -102,22 +101,35 @@ public class MapRenderer {
 		decorBatch.draw(grassRegion1, 935.0f / PPM, 31.8f / PPM, 19.1f / PPM, 6.7f / PPM);
 		decorBatch.draw(grassRegion1, 640.0f / PPM, 31.8f / PPM, 17.0f / PPM, 5.0f / PPM);
 		decorBatch.draw(grassRegion1, 460.0f / PPM, 31.8f / PPM, 17.0f / PPM, 5.0f / PPM);
+		decorBatch.draw(grassRegion1, 1510.0f / PPM, 64.0f / PPM, 17.0f / PPM, 5.0f / PPM);
+		decorBatch.draw(grassRegion1, 1775.0f / PPM, 64.0f / PPM, 17.0f / PPM, 5.0f / PPM);
+		decorBatch.draw(grassRegion1, 1950.0f / PPM, 64.0f / PPM, 17.0f / PPM, 5.0f / PPM);
 		decorBatch.draw(grassRegion2, 776.0f / PPM, 31.8f / PPM, 21.3f / PPM, 8.4f / PPM);
 		decorBatch.draw(grassRegion2, 880.0f / PPM, 31.8f / PPM, 21.3f / PPM, 8.4f / PPM);
-		decorBatch.draw(grassRegion2, 420.0f / PPM, 63.8f / PPM, 21.3f / PPM, 8.4f / PPM);
+		decorBatch.draw(grassRegion2, 420.0f / PPM, 64.0f / PPM, 21.3f / PPM, 8.4f / PPM);
+		decorBatch.draw(grassRegion2, 1150.0f / PPM, 127.8f / PPM, 21.3f / PPM, 8.4f / PPM);
+		decorBatch.draw(grassRegion2, 1925.0f / PPM, 64.0f / PPM, 21.3f / PPM, 8.4f / PPM);
 		decorBatch.draw(grassRegion3, 610.0f / PPM, 31.8f / PPM, 19.1f / PPM, 6.7f / PPM);
 		decorBatch.draw(grassRegion3, 820.0f / PPM, 31.8f / PPM, 19.1f / PPM, 6.7f / PPM);
 		decorBatch.draw(grassRegion3, 1180.0f / PPM, 127.8f / PPM, 19.1f / PPM, 6.7f / PPM);
+		decorBatch.draw(grassRegion3, 1900.0f / PPM, 64.0f / PPM, 19.1f / PPM, 6.7f / PPM);
+		decorBatch.draw(grassRegion3, 2155.0f / PPM, 96.0f / PPM, 19.1f / PPM, 6.7f / PPM);
 		decorBatch.draw(rockRegion1, 480.0f / PPM, 31.8f / PPM, 42.5f / PPM, 18.3f / PPM);
 		decorBatch.draw(rockRegion1, 1300.0f / PPM, 63.8f / PPM, 42.5f / PPM, 18.3f / PPM);
 		decorBatch.draw(rockRegion2, 825.0f / PPM, 63.8f / PPM, 57.4f / PPM, 20.0f / PPM);
+		decorBatch.draw(rockRegion2, 1420.0f / PPM, 63.8f / PPM, 57.4f / PPM, 20.0f / PPM);
 		decorBatch.draw(rockRegion3, 1030.0f / PPM, 127.8f / PPM, 95.6f / PPM, 30.0f / PPM);
+		decorBatch.draw(rockRegion3, 1330.0f / PPM, 64.0f / PPM, 95.6f / PPM, 30.0f / PPM);
+		decorBatch.draw(rockRegion3, 2000.0f / PPM, 64.0f / PPM, 95.6f / PPM, 30.0f / PPM);
 		decorBatch.draw(lampRegion, 525.0f / PPM, 31.8f / PPM, 41.9f / PPM, 95.0f / PPM);
 		decorBatch.draw(lampRegion, 695.0f / PPM, 31.8f / PPM, 41.9f / PPM, 95.0f / PPM);
+		decorBatch.draw(lampRegion, 1815.0f / PPM, 64.0f / PPM, 41.9f / PPM, 95.0f / PPM);
+		decorBatch.draw(fenceRegion2, 1615.0f / PPM, 64.0f / PPM,  121.1f / PPM, 31.3f / PPM);
 		decorBatch.draw(signRegion, 930.0f / PPM, 127.8f / PPM, 29.8f / PPM, 51.5f / PPM);
+		
 		decorBatch.end();
 	}
-
+	
 	public void loadBackgrounds(float x, int y) {
 		backgroundBatch1.setProjectionMatrix(camera.combined);
 		backgroundBatch1.begin();

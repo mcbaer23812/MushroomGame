@@ -39,7 +39,7 @@ public class Player {
 		grounded = true;
 		frames = new TextureRegion[0];
 		animation = new Animation<TextureRegion>(0.1f, frames);
-		position = new Vector2(1280, 50);
+		position = new Vector2(640, 50);
 		footPosition = new Vector2(0, -0.15f);
 		grounded = true;
 		facingLeft = false;
