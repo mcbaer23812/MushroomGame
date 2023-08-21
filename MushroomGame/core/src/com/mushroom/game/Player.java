@@ -39,7 +39,7 @@ public class Player {
 		grounded = true;
 		frames = new TextureRegion[0];
 		animation = new Animation<TextureRegion>(0.1f, frames);
-		position = new Vector2(640, 50);
+		position = new Vector2(1580, 50);
 		footPosition = new Vector2(0, -0.15f);
 		grounded = true;
 		facingLeft = false;
@@ -69,7 +69,8 @@ public class Player {
 		bodyFixtureDef.shape = bodyShape;
 		bodyFixtureDef.density = 1.0f;
 		bodyFixtureDef.friction = 2.5f;
-		body.createFixture(bodyFixtureDef);
+		Fixture bodyFixture = body.createFixture(bodyFixtureDef);
+		bodyFixture.setUserData("body");
 		bodyShape.dispose();
 
 		PolygonShape footSensor = new PolygonShape();
@@ -207,12 +208,6 @@ public class Player {
 
 	}
 
-	public void dispose() {
-		idleSpriteSheet.dispose();
-		runningSpriteSheet.dispose();
-		world.dispose();
-	}
-
 	public void setBodyPosition(Vector2 position) {
 		this.body.setTransform(position.scl(1f / PPM), 0f);
 	}
@@ -231,5 +226,11 @@ public class Player {
 
 	public boolean getGrounded() {
 		return grounded;
+	}
+	
+	public void dispose() {
+		idleSpriteSheet.dispose();
+		runningSpriteSheet.dispose();
+		world.dispose();
 	}
 }

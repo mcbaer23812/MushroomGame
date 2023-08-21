@@ -155,18 +155,6 @@ public class MapRenderer {
 		viewport.update(width, height, true);
 	}
 
-	public void dispose() {
-		backgroundBatch1.dispose();
-		backgroundBatch2.dispose();
-		backgroundBatch3.dispose();
-		backgroundTexture1.dispose();
-		backgroundTexture2.dispose();
-		backgroundTexture3.dispose();
-		map.dispose();
-		tiledMapRenderer.dispose();
-		decorAtlas.dispose();
-	}
-
 	public TiledMap getTiledMap() {
 		return map;
 	}
@@ -178,4 +166,17 @@ public class MapRenderer {
 	public ExtendViewport getViewport() {
 		return viewport;
 	}
+	
+	public void dispose() {
+		backgroundBatch1.dispose();
+		backgroundBatch2.dispose();
+		backgroundBatch3.dispose();
+		backgroundTexture1.dispose();
+		backgroundTexture2.dispose();
+		backgroundTexture3.dispose();
+		map.dispose();
+		tiledMapRenderer.dispose();
+		decorAtlas.dispose();
+	}
 }
+
