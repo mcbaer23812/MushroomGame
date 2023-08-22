@@ -7,16 +7,12 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.Contact;
-import com.badlogic.gdx.physics.box2d.ContactImpulse;
-import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 
-public class Shop implements ContactListener{
+public class Shop{
 	private Texture shopSpriteSheet;
 	private TextureRegion[] frames;
 	private Animation<TextureRegion> animation;
@@ -65,52 +61,12 @@ public class Shop implements ContactListener{
 		batch.draw(currentFrame, 1655.0f/PPM, 64.0f/PPM, 118.0f/PPM, 128.0f/PPM);
 	}
 	
-	public boolean isBodyFixture(Fixture fixture) {
-		Object userData = fixture.getUserData();
-		return userData != null && userData.equals("body");
-	}
-	
-	public boolean isShopFixture(Fixture fixture) {
-		Object userData = fixture.getUserData();
-		return userData != null && userData.equals("shop");
-	}
-
-	@Override
-	public void beginContact(Contact contact) {
-		Fixture fixtureA = contact.getFixtureA();
-		Fixture fixtureB = contact.getFixtureB();
-		if(isBodyFixture(fixtureA) && isShopFixture(fixtureB)) {
-			touching = true;
-		} else if(isShopFixture(fixtureA) && isBodyFixture(fixtureB)) {
-			touching = true;
-		}
-		
-	}
-
-	@Override
-	public void endContact(Contact contact) {
-		Fixture fixtureA = contact.getFixtureA();
-		Fixture fixtureB = contact.getFixtureB();
-		if(isBodyFixture(fixtureA) && isShopFixture(fixtureB)) {
-			touching = false;
-		} else if(isShopFixture(fixtureA) && isBodyFixture(fixtureB)) {
-			touching = false;
-		}		
-	}
-
-	@Override
-	public void preSolve(Contact contact, Manifold oldManifold) {
-		
-	}
-
-	@Override
-	public void postSolve(Contact contact, ContactImpulse impulse) {
-		// TODO Auto-generated method stub
-		
-	}
-	
 	public boolean getTouching() {
 		return touching; 
+	}
+	
+	public void setTouching(boolean touching) {
+		this.touching = touching;
 	}
 	
 	public void dispose() {

@@ -25,7 +25,7 @@ public class MushroomGame extends ApplicationAdapter {
 	private World world;
 	private Box2DDebugRenderer box2DDebugRenderer;
 	private MapPolygons mapPolygons;
-	private FeetContactListener feetContactListener;
+	private WorldContactListener worldContactListener;
 	// PLAYER
 	private SpriteBatch playerBatch;
 	private Player player;
@@ -47,9 +47,8 @@ public class MushroomGame extends ApplicationAdapter {
 		shop = new Shop(new Texture("images/shop_anim.png"), world, player);
 		shop.setHitbox(new Vector2(1710.0f, 64.0f));
 		mapPolygons.parseMapObjects(mapRenderer.getTiledMap().getLayers().get("objects").getObjects());
-		feetContactListener = new FeetContactListener(player);
-		world.setContactListener(feetContactListener);
-		world.setContactListener(shop);
+		worldContactListener = new WorldContactListener(player, shop);
+		world.setContactListener(worldContactListener);
 	}
 
 	@Override
@@ -75,6 +74,7 @@ public class MushroomGame extends ApplicationAdapter {
 		
 		world.clearForces();
 		System.out.println("pos: " + player.getPosition());
+//		System.out.println(shop.getTouching());
 //		System.out.println(shop.getTouching());
 //		System.out.println(player.getGrounded() + " " +  player.getBody().getFixtureList().get(1).getFriction() + " " + player.getBody().getLinearDamping());
 		box2DDebugRenderer.render(world, mapRenderer.getOrthoCamera().combined);

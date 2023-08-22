@@ -6,11 +6,13 @@ import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
 
-public class FeetContactListener implements ContactListener {
+public class WorldContactListener implements ContactListener {
 	private Player player;
+	private Shop shop;
 
-	public FeetContactListener(Player player) {
+	public WorldContactListener(Player player, Shop shop) {
 		this.player = player;
+		this.shop = shop;
 	}
 
 	private boolean isFootSensor(Fixture fixture) {
@@ -22,6 +24,16 @@ public class FeetContactListener implements ContactListener {
 		Object userData = fixture.getUserData();
 		return userData != null && userData.equals("mapObject");
 	}
+	
+	public boolean isBodyFixture(Fixture fixture) {
+		Object userData = fixture.getUserData();
+		return userData != null && userData.equals("body");
+	}
+	
+	public boolean isShopFixture(Fixture fixture) {
+		Object userData = fixture.getUserData();
+		return userData != null && userData.equals("shop");
+	}
 
 	@Override
 	public void beginContact(Contact contact) {
@@ -31,6 +43,10 @@ public class FeetContactListener implements ContactListener {
 			player.setGrounded(true);
 		} else if (isFootSensor(fixtureB) && isMapObject(fixtureA)) {
 			player.setGrounded(true);
+		} else if(isBodyFixture(fixtureA) && isShopFixture(fixtureB)) {
+			shop.setTouching(true);
+		} else if(isShopFixture(fixtureA) && isBodyFixture(fixtureB)) {
+			shop.setTouching(true);
 		}
 	}
 
@@ -42,7 +58,11 @@ public class FeetContactListener implements ContactListener {
 			player.setGrounded(false);
 		} else if (isFootSensor(fixtureB) && isMapObject(fixtureA)) {
 			player.setGrounded(false);
-		}
+		} else if(isBodyFixture(fixtureA) && isShopFixture(fixtureB)) {
+			shop.setTouching(false);
+		} else if(isShopFixture(fixtureA) && isBodyFixture(fixtureB)) {
+			shop.setTouching(false);
+		}		
 	}
 
 	@Override
