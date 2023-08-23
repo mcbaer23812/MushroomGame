@@ -75,7 +75,6 @@ public class MushroomGame extends ApplicationAdapter {
 		world.clearForces();
 		System.out.println("pos: " + player.getPosition());
 //		System.out.println(shop.getTouching());
-//		System.out.println(shop.getTouching());
 //		System.out.println(player.getGrounded() + " " +  player.getBody().getFixtureList().get(1).getFriction() + " " + player.getBody().getLinearDamping());
 		box2DDebugRenderer.render(world, mapRenderer.getOrthoCamera().combined);
 	}
