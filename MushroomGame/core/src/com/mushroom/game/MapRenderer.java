@@ -34,7 +34,7 @@ public class MapRenderer {
 	private AtlasRegion rockRegion2;
 	private AtlasRegion rockRegion3;
 	private AtlasRegion signRegion;
-	private float backgroundOffset = 0f;
+	private float backgroundOffset = 0.0f;
 	private float PPM = 100.0f; // Pixels Per Meter
 	// CAMERA & VIEWPORT
 	private OrthographicCamera camera;
@@ -79,7 +79,7 @@ public class MapRenderer {
 	public void renderMap(Vector2 playerPosition) {
 		camera.update();
 		camera.position.set(playerPosition.x, viewport.getWorldHeight() / 2, 0);
-		loadBackgrounds(0 + backgroundOffset, 0);
+		loadBackgrounds(backgroundOffset, 0);
 		loadBackgrounds(viewport.getWorldWidth() + backgroundOffset, 0);
 		if (playerPosition.x - backgroundOffset >= viewport.getWorldWidth() * 1.5) {
 			backgroundOffset += 640.0f / PPM;

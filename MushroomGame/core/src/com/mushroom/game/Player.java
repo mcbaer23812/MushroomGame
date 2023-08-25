@@ -21,25 +21,25 @@ public class Player {
 	private Animation<TextureRegion> animation;
 
 	private Vector2 footPosition;
-	private Vector2 position;
+	private Vector2 playerPosition;
 	private Boolean walking;
 	private Boolean running;
 	private Boolean facingLeft;
 	private Boolean grounded;
 	private float stateTime;
 
-	private float PPM = 100f; // Pixels Per Meter
+	private float PPM = 100.0f; // Pixels Per Meter
 	private World world;
 	private Body body;
 
-	public Player(Texture idleSpriteSheet, Texture runningSpriteSheet, World world) {
+	public Player(Texture idleSpriteSheet, Texture runningSpriteSheet, World world, Vector2 playerPosition) {
 		this.world = world;
 		this.idleSpriteSheet = idleSpriteSheet;
 		this.runningSpriteSheet = runningSpriteSheet;
 		grounded = true;
 		frames = new TextureRegion[0];
 		animation = new Animation<TextureRegion>(0.1f, frames);
-		position = new Vector2(1580, 50);
+		this.playerPosition = playerPosition;
 		footPosition = new Vector2(0, -0.15f);
 		grounded = true;
 		facingLeft = false;
@@ -49,10 +49,10 @@ public class Player {
 
 		BodyDef bodyDef = new BodyDef();
 		bodyDef.type = BodyDef.BodyType.DynamicBody;
-		bodyDef.position.set(position.x / PPM, position.y / PPM);
+		bodyDef.position.set(playerPosition.x / PPM, playerPosition.y / PPM);
 		body = this.world.createBody(bodyDef);
 		body.setFixedRotation(true);
-		body.setLinearDamping(2f);
+		body.setLinearDamping(2.0f);
 
 		PolygonShape capShape = new PolygonShape();
 		capShape.setAsBox((frames[0].getRegionWidth() / 2.3f) / PPM, (frames[0].getRegionHeight() / 3.7f) / PPM);
@@ -104,7 +104,7 @@ public class Player {
 		if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && Math.abs(body.getLinearVelocity().y) < 0.01f) {
 			jump();
 		}
-		position.set(body.getPosition().scl(PPM));
+		playerPosition.set(body.getPosition().scl(PPM));
 		stateTime += delta;
 		pickFrames();
 	}
@@ -112,12 +112,11 @@ public class Player {
 	public void friction() {
 		float friction = body.getFixtureList().get(1).getFriction();
 		if (!grounded) {
-			friction = 0f;
+			friction = 0.0f;
 		} else if (friction < 2.5f && grounded) {
 			friction += 0.25f;
 		}
 		body.getFixtureList().get(1).setFriction(friction);
-		;
 	}
 
 	public void idle() {
@@ -131,7 +130,7 @@ public class Player {
 	}
 
 	public void walkLeft() {
-		if (Math.abs(body.getLinearVelocity().x) < 1.200f) {
+		if (Math.abs(body.getLinearVelocity().x) < 1.20f) {
 			if (Math.abs(body.getLinearVelocity().x) < 0.8f) { // faster initial acceleration
 				body.applyLinearImpulse(-2.8f / PPM, 0, body.getWorldCenter().x, body.getWorldCenter().y, true);
 			} else {
@@ -144,7 +143,7 @@ public class Player {
 	}
 
 	public void runLeft() {
-		if (Math.abs(body.getLinearVelocity().x) < 2.100f) {
+		if (Math.abs(body.getLinearVelocity().x) < 2.10f) {
 			body.applyLinearImpulse(-2.0f / PPM, 0, body.getWorldCenter().x, body.getWorldCenter().y, true);
 			running = true;
 			walking = false;
@@ -153,7 +152,7 @@ public class Player {
 	}
 
 	public void walkRight() {
-		if (Math.abs(body.getLinearVelocity().x) < 1.200f) {
+		if (Math.abs(body.getLinearVelocity().x) < 1.20f) {
 			if (Math.abs(body.getLinearVelocity().x) < 0.8) { // faster initial acceleration
 				body.applyLinearImpulse(2.8f / PPM, 0, body.getWorldCenter().x, body.getWorldCenter().y, true);
 			} else {
@@ -166,7 +165,7 @@ public class Player {
 	}
 
 	public void runRight() {
-		if (Math.abs(body.getLinearVelocity().x) < 2.100f) {
+		if (Math.abs(body.getLinearVelocity().x) < 2.10f) {
 			body.applyLinearImpulse(2.0f / PPM, 0, body.getWorldCenter().x, body.getWorldCenter().y, true);
 			running = true;
 			walking = false;
@@ -209,7 +208,7 @@ public class Player {
 	}
 
 	public void setBodyPosition(Vector2 position) {
-		this.body.setTransform(position.scl(1f / PPM), 0f);
+		this.body.setTransform(position.scl(1.0f / PPM), 0.0f);
 	}
 
 	public void setGrounded(boolean grounded) {

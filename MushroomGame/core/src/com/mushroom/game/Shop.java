@@ -27,14 +27,28 @@ public class Shop{
 	private World world;
 	private Body body;
 	
+	private Vector2 hitboxPosition;
+	private Vector2 shopPosition;
 	private BitmapFont interactFont;
 	private String interactText;
 	private int interactCounter;
 	private boolean touching;
 	
-	public Shop(Texture shopSpriteSheet, World world, Player player) {
+	public Shop(Texture shopSpriteSheet, World world, Player player, Vector2 shopPosition) {
 		this.world = world;
+		this.shopPosition = shopPosition;
+		
 		TextureRegion[][] textureRegions = TextureRegion.split(shopSpriteSheet, 118, 128);
+		frames = new TextureRegion[5];
+		int index = 0;
+		for (int i = 0; i < 5; i++) {
+			frames[index++] = textureRegions[0][i];
+		}
+		animation = new Animation<TextureRegion>(1f/5f, frames); //1 second for 5 frames
+		
+		Vector2 hitboxPosition = new Vector2(shopPosition.x + 55.0f, shopPosition.y);
+		createHitbox(hitboxPosition);
+		setHitboxPosition(hitboxPosition);
 		
 		interactFont = new BitmapFont();
 //		interactFont.getRegion().getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);
@@ -42,13 +56,6 @@ public class Shop{
 		interactFont.setUseIntegerPositions(false);
 		interactCounter = 0;
 		setInteractText();
-		
-		frames = new TextureRegion[5];
-		int index = 0;
-		for (int i = 0; i < 5; i++) {
-			frames[index++] = textureRegions[0][i];
-		}
-		animation = new Animation<TextureRegion>(1f/5f, frames); //1 second for 5 frames
 	}
 	
 	public void update(float delta) {
@@ -58,17 +65,16 @@ public class Shop{
 	public void draw(SpriteBatch batch) {
 		GlyphLayout fontLayout = new GlyphLayout(interactFont, interactText, Color.WHITE, 1000.0f, Align.left, false);
 		TextureRegion currentFrame = animation.getKeyFrame(stateTime, true);
-		batch.draw(currentFrame, 1655.0f/PPM, 64.0f/PPM, 118.0f/PPM, 128.0f/PPM);
-		
+		batch.draw(currentFrame, shopPosition.x/PPM, shopPosition.y/PPM, 118.0f/PPM, 128.0f/PPM);
 		if(getTouching()) {
-			interactFont.draw(batch, fontLayout, 1670.0f/PPM, 128.0f/PPM);
+			interactFont.draw(batch, fontLayout, (shopPosition.x + 15.0f)/PPM, (shopPosition.y + 64.0f)/PPM);
 		}
 	}
 	
-	public void setHitbox(Vector2 position) {
+	public void createHitbox(Vector2 hitbox) {
 		BodyDef bodyDef = new BodyDef();
 		bodyDef.type = BodyDef.BodyType.StaticBody;
-		bodyDef.position.set(position.x / PPM, position.y / PPM);
+		bodyDef.position.set(hitbox.x / PPM, hitbox.y / PPM);
 		body = this.world.createBody(bodyDef);
 		
 		PolygonShape shopShape = new PolygonShape();
@@ -95,10 +101,13 @@ public class Shop{
 		this.touching = touching;
 	}
 	
+	public void setHitboxPosition(Vector2 hitboxPosition) {
+		this.hitboxPosition = hitboxPosition;
+	}
+	
 	public void dispose() {
 		shopSpriteSheet.dispose();
 		world.dispose();
-		
 	}
 	
 }
