@@ -66,6 +66,7 @@ public class MushroomGame extends ApplicationAdapter {
 	@Override
 	public void render() {
 		world.step(1 / 60.0f, 6, 2);
+		Gdx.gl.glClearColor(0f,0f,0f,1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); //prevents overdraw, clears different portions of the framebuffer
 		
 		// RGB(21/255,21/255,255/255) RGB = float*255 RGB/maxrgb = float

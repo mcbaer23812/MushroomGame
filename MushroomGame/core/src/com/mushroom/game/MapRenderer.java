@@ -66,7 +66,7 @@ public class MapRenderer {
 		}
 		// CAMERA & VEWIPORT
 		camera = new OrthographicCamera();
-		viewport = new ExtendViewport(640.0f / PPM, 320.0f / PPM, camera);
+		viewport = new ExtendViewport(512.0f / PPM, 256.0f / PPM, camera);
 		// MAP & MAP RENDERER
 		map = new TmxMapLoader().load("tilesets/OakWoodsTileMap.tmx");
 		tiledMapRenderer = new OrthogonalTiledMapRenderer(map, 1 / PPM);

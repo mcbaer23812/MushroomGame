@@ -1,45 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="80" height="45" tilewidth="24" tileheight="24" infinite="0" nextlayerid="8" nextobjectid="67">
+ <editorsettings>
+  <chunksize width="24" height="24"/>
+ </editorsettings>
  <tileset firstgid="1" source="oak_woods_tileset.tsx"/>
  <objectgroup id="3" name="objects">
-  <object id="18" x="328.501" y="1373.02">
-   <polygon points="0,0 0,-32 -32,-32 -32,0"/>
-  </object>
-  <object id="21" x="232.501" y="1245.02">
-   <polygon points="0,0 0,-96 -32,-96 -32,0"/>
-  </object>
-  <object id="23" x="2024.5" y="1309.02">
-   <polygon points="0,0 0,32 32,32 32,0"/>
-  </object>
-  <object id="24" x="2056.5" y="1309.02">
-   <polygon points="0,0 0,-64 32,-64 32,0"/>
-  </object>
   <object id="25" x="2088.5" y="1245.02">
    <polygon points="0,0 0,-96 32,-96 32,0"/>
-  </object>
-  <object id="34" x="776.501" y="1341.02">
-   <polygon points="0,0 0,-32 32,-32 32,0"/>
-  </object>
-  <object id="35" x="808.501" y="1309.02">
-   <polygon points="0,0 0,-32 32,-32 288,-32 288,0"/>
-  </object>
-  <object id="36" x="1096.5" y="1309.02">
-   <polygon points="0,0 0,32 32,32 32,0 0,0"/>
-  </object>
-  <object id="38" x="328.501" y="1373.02">
-   <polygon points="0,0 352,0 352,32 0,32"/>
-  </object>
-  <object id="39" x="1128.5" y="1341.02">
-   <polygon points="0,0 864,0 896,0 896,32 0,32"/>
-  </object>
-  <object id="40" x="232.501" y="1245.02">
-   <polygon points="0,0 0,64 32,64 32,0"/>
-  </object>
-  <object id="41" x="264.501" y="1309.02">
-   <polygon points="0,0 32,0 32,32 0,32"/>
-  </object>
-  <object id="42" x="680.501" y="1341.02">
-   <polygon points="0,0 96,0 96,32 0,32 -8,32 -7.45455,0"/>
   </object>
   <object id="52" x="216" y="864">
    <polygon points="0,0 24,0 24,24 0,24"/>
