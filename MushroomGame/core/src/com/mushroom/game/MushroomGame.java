@@ -50,11 +50,11 @@ public class MushroomGame extends ApplicationAdapter {
 		mapPolygons = new MapPolygons(world);
 		mapPolygons.parseMapObjects(mapRenderer.getTiledMap().getLayers().get("objects").getObjects());
 		
-		Vector2 playerPosition = new Vector2(640.0f, 64.0f);
+		Vector2 playerPosition = new Vector2(1440.0f, 64.0f);
 		playerBatch = new SpriteBatch();
 		player = new Player(new Texture("images/red-shroom-idle.png"), new Texture("images/red-shroom-run.png"), world, playerPosition);
 		
-		Vector2 shopPosition = new Vector2(1655.0f, 64.0f);
+		Vector2 shopPosition = new Vector2(1440.0f, 48.0f);
 		shopBatch = new SpriteBatch();
 		shop = new Shop(new Texture("images/shop_anim.png"), world, player, shopPosition);
 		
@@ -66,7 +66,7 @@ public class MushroomGame extends ApplicationAdapter {
 	@Override
 	public void render() {
 		world.step(1 / 60.0f, 6, 2);
-//		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); //prevents overdraw, clears different portions of the framebuffer
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); //prevents overdraw, clears different portions of the framebuffer
 		
 		// RGB(21/255,21/255,255/255) RGB = float*255 RGB/maxrgb = float
 		player.update(Gdx.graphics.getDeltaTime());
@@ -84,9 +84,9 @@ public class MushroomGame extends ApplicationAdapter {
 		playerBatch.end();
 		
 		world.clearForces();
-//		System.out.println("pos: " + player.getPosition());
+		System.out.println("pos: " + player.getPosition());
 //		System.out.println(player.getGrounded() + " " +  player.getBody().getFixtureList().get(1).getFriction() + " " + player.getBody().getLinearDamping());
-		box2DDebugRenderer.render(world, mapRenderer.getOrthoCamera().combined);
+//		box2DDebugRenderer.render(world, mapRenderer.getOrthoCamera().combined);
 	}
 
 	@Override
