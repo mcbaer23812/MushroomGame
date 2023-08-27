@@ -11,11 +11,15 @@ import com.badlogic.gdx.physics.box2d.World;
 
 /*
  * ROADMAP
- * finish map
+ * finish level 1
+ * 
  * make background parallax and have it load in a less messy way
+ * 
  * add mushroom spore mechanic
+ * 
  * multiple levels (talk to shop guy to go to next level?), if next levels, then fix map renderer
  * to be abstract and allow drawing of textures per level instead of in a separate class to "mushroom game lvl x"
+ * 
  * main menu
  * 
  */
@@ -46,7 +50,7 @@ public class MushroomGame extends ApplicationAdapter {
 		mapPolygons = new MapPolygons(world);
 		mapPolygons.parseMapObjects(mapRenderer.getTiledMap().getLayers().get("objects").getObjects());
 		
-		Vector2 playerPosition = new Vector2(1655.0f, 64.0f);
+		Vector2 playerPosition = new Vector2(640.0f, 64.0f);
 		playerBatch = new SpriteBatch();
 		player = new Player(new Texture("images/red-shroom-idle.png"), new Texture("images/red-shroom-run.png"), world, playerPosition);
 		
@@ -56,19 +60,19 @@ public class MushroomGame extends ApplicationAdapter {
 		
 		worldContactListener = new WorldContactListener(player, shop);
 		world.setContactListener(worldContactListener);
+		
 	}
 
 	@Override
 	public void render() {
 		world.step(1 / 60.0f, 6, 2);
-		Gdx.gl.glClearColor(0.53f, 0.81f, 0.92f, 1);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+//		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); //prevents overdraw, clears different portions of the framebuffer
 		
 		// RGB(21/255,21/255,255/255) RGB = float*255 RGB/maxrgb = float
 		player.update(Gdx.graphics.getDeltaTime());
-		mapRenderer.renderMap(player.getPosition().scl(1.0f / PPM));
-		
 		shop.update(Gdx.graphics.getDeltaTime());
+
+		mapRenderer.renderMap(player.getPosition().scl(1.0f / PPM));
 		shopBatch.setProjectionMatrix(mapRenderer.getOrthoCamera().combined);
 		shopBatch.begin();
 		shop.draw(shopBatch);
@@ -80,10 +84,9 @@ public class MushroomGame extends ApplicationAdapter {
 		playerBatch.end();
 		
 		world.clearForces();
-		System.out.println("pos: " + player.getPosition());
-//		System.out.println(shop.getTouching());
+//		System.out.println("pos: " + player.getPosition());
 //		System.out.println(player.getGrounded() + " " +  player.getBody().getFixtureList().get(1).getFriction() + " " + player.getBody().getLinearDamping());
-//		box2DDebugRenderer.render(world, mapRenderer.getOrthoCamera().combined);
+		box2DDebugRenderer.render(world, mapRenderer.getOrthoCamera().combined);
 	}
 
 	@Override

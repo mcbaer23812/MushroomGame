@@ -3,6 +3,7 @@ package com.mushroom.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
@@ -15,9 +16,7 @@ import com.badlogic.gdx.utils.viewport.ExtendViewport;
 
 public class MapRenderer {
 	// BACKGROUNDS
-	private SpriteBatch backgroundBatch1;
-	private SpriteBatch backgroundBatch2;
-	private SpriteBatch backgroundBatch3;
+	private SpriteBatch backgroundBatch;
 	private Texture backgroundTexture1;
 	private Texture backgroundTexture2;
 	private Texture backgroundTexture3;
@@ -34,20 +33,17 @@ public class MapRenderer {
 	private AtlasRegion rockRegion2;
 	private AtlasRegion rockRegion3;
 	private AtlasRegion signRegion;
-	private float backgroundOffset = 0.0f;
-	private float PPM = 100.0f; // Pixels Per Meter
 	// CAMERA & VIEWPORT
 	private OrthographicCamera camera;
 	private ExtendViewport viewport;
 	// MAP & RENDERER
 	private TiledMap map;
 	private OrthogonalTiledMapRenderer tiledMapRenderer;
+	private float PPM = 100.0f; // Pixels Per Meter
 
 	public MapRenderer() {
 		// BACKGROUNDS & OTHER TEXTURES
-		backgroundBatch1 = new SpriteBatch();
-		backgroundBatch2 = new SpriteBatch();
-		backgroundBatch3 = new SpriteBatch();
+		backgroundBatch = new SpriteBatch();
 		backgroundTexture1 = new Texture("images/background_layer_1.png");
 		backgroundTexture2 = new Texture("images/background_layer_2.png");
 		backgroundTexture3 = new Texture("images/background_layer_3.png");
@@ -66,7 +62,7 @@ public class MapRenderer {
 		signRegion = decorAtlas.findRegion("sign");
 		for (TextureAtlas.AtlasRegion region : decorAtlas.getRegions()) {
 			// Apply texture filter so they aren't blurry
-			region.getTexture().setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
+			region.getTexture().setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
 		}
 		// CAMERA & VEWIPORT
 		camera = new OrthographicCamera();
@@ -75,19 +71,12 @@ public class MapRenderer {
 		map = new TmxMapLoader().load("tilesets/OakWoodsTileMap.tmx");
 		tiledMapRenderer = new OrthogonalTiledMapRenderer(map, 1 / PPM);
 	}
-
+	
 	public void renderMap(Vector2 playerPosition) {
-		camera.update();
-		camera.position.set(playerPosition.x, viewport.getWorldHeight() / 2, 0);
-		loadBackgrounds(backgroundOffset, 0);
-		loadBackgrounds(viewport.getWorldWidth() + backgroundOffset, 0);
-		if (playerPosition.x - backgroundOffset >= viewport.getWorldWidth() * 1.5) {
-			backgroundOffset += 640.0f / PPM;
-		} else if (playerPosition.x <= (0 + backgroundOffset) + viewport.getWorldWidth() * 0.5) {
-			backgroundOffset -= 640.0f / PPM;
-		}
-		tiledMapRenderer.setView(camera);
-		tiledMapRenderer.render();
+		updateCamera(playerPosition);
+		renderBackgrounds(6);
+		renderTileMap();
+		
 		decorBatch.setProjectionMatrix(camera.combined);
 		decorBatch.begin();
 		// scaling x & y based on what looked best for grass1 texture, then multiplying
@@ -95,7 +84,6 @@ public class MapRenderer {
 		// appropriate based on sizes in decorAtlas file, then manually tweaking if
 		// necessary
 		decorBatch.draw(fenceRegion1, 575.0f / PPM, 31.8f / PPM, 121.1f / PPM, 31.3f / PPM);
-//		decorBatch.draw(fenceRegion2, 730 / PPM, 31.8f / PPM, 121.1f / PPM, 31.3f / PPM);
 		decorBatch.draw(grassRegion1, 740.0f / PPM, 31.8f / PPM, 17.0f / PPM, 5.0f / PPM);
 		decorBatch.draw(grassRegion1, 330.0f / PPM, 255.0f / PPM, 17.0f / PPM, 5.0f / PPM);
 		decorBatch.draw(grassRegion1, 935.0f / PPM, 31.8f / PPM, 19.1f / PPM, 6.7f / PPM);
@@ -130,22 +118,28 @@ public class MapRenderer {
 		decorBatch.end();
 	}
 	
-	public void loadBackgrounds(float x, int y) {
-		backgroundBatch1.setProjectionMatrix(camera.combined);
-		backgroundBatch1.begin();
-		backgroundBatch1.draw(backgroundTexture1, x, y, viewport.getWorldWidth(), viewport.getWorldHeight());
-		backgroundBatch1.end();
+	public void updateCamera(Vector2 playerPosition) {
+		camera.update();
+		camera.position.set(playerPosition.x, viewport.getWorldHeight() / 2, 0);
+	}
+	
+	public void renderTileMap() {
+		tiledMapRenderer.setView(camera);
+		tiledMapRenderer.render();
+	}
+	
+	public void renderBackgrounds(int repetitions) {
+		backgroundBatch.setProjectionMatrix(camera.combined);
+		backgroundBatch.begin();
+		float backgroundOffset = 0;
+		for(int i = 0; i < repetitions; i++) {
+			backgroundBatch.draw(backgroundTexture1, backgroundOffset, 0, 6.4f, 3.6f);
+			backgroundBatch.draw(backgroundTexture2, backgroundOffset, 0, 6.4f, 3.6f);
+			backgroundBatch.draw(backgroundTexture3, backgroundOffset, 0, 6.4f, 3.6f);
+			backgroundOffset += backgroundTexture1.getWidth()/PPM;
+		}
 
-		backgroundBatch2.setProjectionMatrix(camera.combined);
-		backgroundBatch2.begin();
-		backgroundBatch2.draw(backgroundTexture2, x, y, viewport.getWorldWidth(), viewport.getWorldHeight());
-		backgroundBatch2.end();
-
-		backgroundBatch3.setProjectionMatrix(camera.combined);
-		backgroundBatch3.begin();
-		backgroundBatch3.draw(backgroundTexture3, x, y, viewport.getWorldWidth(), viewport.getWorldHeight());
-		backgroundBatch3.end();
-
+		backgroundBatch.end();
 	}
 
 	public void resize(int width, int height) {
@@ -168,9 +162,7 @@ public class MapRenderer {
 	}
 	
 	public void dispose() {
-		backgroundBatch1.dispose();
-		backgroundBatch2.dispose();
-		backgroundBatch3.dispose();
+		backgroundBatch.dispose();
 		backgroundTexture1.dispose();
 		backgroundTexture2.dispose();
 		backgroundTexture3.dispose();
