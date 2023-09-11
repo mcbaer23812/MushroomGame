@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="80" height="45" tilewidth="24" tileheight="24" infinite="0" nextlayerid="8" nextobjectid="67">
+<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="80" height="45" tilewidth="24" tileheight="24" infinite="0" nextlayerid="8" nextobjectid="67">
  <editorsettings>
   <chunksize width="24" height="24"/>
  </editorsettings>
  <tileset firstgid="1" source="oak_woods_tileset.tsx"/>
  <objectgroup id="3" name="objects">
-  <object id="25" x="2088.5" y="1245.02">
-   <polygon points="0,0 0,-96 32,-96 32,0"/>
-  </object>
   <object id="52" x="216" y="864">
    <polygon points="0,0 24,0 24,24 0,24"/>
   </object>

@@ -2,7 +2,6 @@ package com.mushroom.game;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
@@ -27,6 +26,7 @@ public class Shop{
 	private World world;
 	private Body body;
 	
+	@SuppressWarnings("unused")
 	private Vector2 hitboxPosition;
 	private Vector2 shopPosition;
 	private BitmapFont interactFont;

@@ -20,6 +20,7 @@ public class Player {
 	private TextureRegion[] frames;
 	private Animation<TextureRegion> animation;
 
+	private float currentLevel;
 	private Vector2 footPosition;
 	private Vector2 playerPosition;
 	private Boolean walking;
@@ -28,12 +29,14 @@ public class Player {
 	private Boolean grounded;
 	private float stateTime;
 
-	private float PPM = 100.0f; // Pixels Per Meter
+	private float PPM = 100.0f;
 	private World world;
 	private Body body;
 
 	public Player(Texture idleSpriteSheet, Texture runningSpriteSheet, World world, Vector2 playerPosition) {
+		this.currentLevel = 1.0f;
 		this.world = world;
+		this.currentLevel = 1;
 		this.idleSpriteSheet = idleSpriteSheet;
 		this.runningSpriteSheet = runningSpriteSheet;
 		grounded = true;
@@ -225,6 +228,10 @@ public class Player {
 
 	public boolean getGrounded() {
 		return grounded;
+	}
+	
+	public float getCurrentLevel() {
+		return currentLevel;
 	}
 	
 	public void dispose() {

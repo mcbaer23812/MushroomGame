@@ -25,8 +25,8 @@ import com.badlogic.gdx.physics.box2d.World;
  */
 
 public class MushroomGame extends ApplicationAdapter {
-	// MAP
-	private MapRenderer mapRenderer;
+	// LEVELS
+	private LevelSelector lvlSelector;
 	// BOX2D
 	private World world;
 	private Box2DDebugRenderer box2DDebugRenderer;
@@ -39,20 +39,18 @@ public class MushroomGame extends ApplicationAdapter {
 	private SpriteBatch shopBatch;
 	private Shop shop;
 
-	private static final float PPM = 100.0f;
-
 	@Override
 	public void create() {
-		mapRenderer = new MapRenderer();
-		
 		world = new World(new Vector2(0, -9.81f), false); // gravity vector here
 		box2DDebugRenderer = new Box2DDebugRenderer();
-		mapPolygons = new MapPolygons(world);
-		mapPolygons.parseMapObjects(mapRenderer.getTiledMap().getLayers().get("objects").getObjects());
 		
 		Vector2 playerPosition = new Vector2(1440.0f, 64.0f);
 		playerBatch = new SpriteBatch();
 		player = new Player(new Texture("images/red-shroom-idle.png"), new Texture("images/red-shroom-run.png"), world, playerPosition);
+		lvlSelector = new LevelSelector(player);
+		
+		mapPolygons = new MapPolygons(world);
+		mapPolygons.parseMapObjects(lvlSelector.getLevel().getMap().getLayers().get("objects").getObjects());
 		
 		Vector2 shopPosition = new Vector2(1440.0f, 48.0f);
 		shopBatch = new SpriteBatch();
@@ -72,14 +70,14 @@ public class MushroomGame extends ApplicationAdapter {
 		// RGB(21/255,21/255,255/255) RGB = float*255 RGB/maxrgb = float
 		player.update(Gdx.graphics.getDeltaTime());
 		shop.update(Gdx.graphics.getDeltaTime());
-
-		mapRenderer.renderMap(player.getPosition().scl(1.0f / PPM));
-		shopBatch.setProjectionMatrix(mapRenderer.getOrthoCamera().combined);
+		
+		lvlSelector.getLevel().render();
+		shopBatch.setProjectionMatrix(lvlSelector.getLevel().getCamera().combined);
 		shopBatch.begin();
 		shop.draw(shopBatch);
 		shopBatch.end();
 		
-		playerBatch.setProjectionMatrix(mapRenderer.getOrthoCamera().combined);
+		playerBatch.setProjectionMatrix(lvlSelector.getLevel().getCamera().combined);
 		playerBatch.begin();
 		player.draw(playerBatch);
 		playerBatch.end();
@@ -92,12 +90,11 @@ public class MushroomGame extends ApplicationAdapter {
 
 	@Override
 	public void resize(int width, int height) {
-		mapRenderer.resize(width, height);
+		lvlSelector.getLevel().resize(width, height);
 	}
 
 	@Override
 	public void dispose() {
-		mapRenderer.dispose();
 		box2DDebugRenderer.dispose();
 		world.dispose();
 		player.dispose();
